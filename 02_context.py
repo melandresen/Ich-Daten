@@ -17,74 +17,64 @@ def correct_ids(start, end, string, window):
     return start_corr, end_corr
 
 
+def extended_search(text, start_index, end_index, tolerance_window):
+
+    span = text[start_index - tolerance_window : end_index + tolerance_window]
+
+    if re.search("Ich| ich|^ich", span):
+        status = "rough_match_{}".format(tolerance_window)
+        start_id_corr, end_id_corr = correct_ids(start_index, end_index, span, tolerance_window)
+        target = text[start_id_corr:end_id_corr]
+        context_before = text[start_id_corr - context_size : start_id_corr]
+        match = target
+        context_after = text[end_id_corr : end_id_corr + context_size]
+
+        return status, context_before, match, context_after
+
+    elif tolerance_window < 25:
+        status, context_before, match, context_after = extended_search(
+            text, start_index, end_index, tolerance_window + 5
+        )
+
+        return status, context_before, match, context_after
+
+    else:
+        return "no_match", "None", "None", "None"
+
+
 def get_context(directory, data_table, context_size):
     """nach den dazugehörigen Textstellen im Korpus suchen und zur Tabelle hinzufügen"""
 
-    corpus = os.listdir(directory)
+    context_data = pd.DataFrame(columns=["status", "context_before", "match", "context_after"])
 
-    lines = [
-        (startID, endID, file_name)
-        for startID, endID, file_name in zip(
-            data_table["StartChar"], data_table["EndChar"], data_table["Text_korr"]
-        )
-    ]
-
-    context_before = []
-    match = []
-    context_after = []
-    status = []
-
-    for start_id, end_id, file_name in lines:
-        if file_name in corpus:
+    for start_index, end_index, file_name, index in zip(
+        data_table["StartChar"], data_table["EndChar"], data_table["Text_korr"], data_table.index
+    ):
+        if os.path.isfile(directory + file_name):
             with open(directory + file_name, "r") as in_file:
                 text = in_file.read()
-            target = text[start_id:end_id]
+            text = re.sub("[\t\n]", " ", text)
+            target = text[start_index:end_index]
 
             if re.fullmatch("[Ii]ch", target):
-                status.append("fullmatch")
-                context_before.append(text[start_id - context_size : start_id])
-                match.append(target)
-                context_after.append(text[end_id : end_id + context_size])
+                context_data.loc[index] = [
+                    "fullmatch",
+                    text[start_index - context_size : start_index],
+                    target,
+                    text[end_index : end_index + context_size],
+                ]
             else:
-                tolerance_window = 5
-                success = 0
-                while tolerance_window < 30:
-                    span = text[start_id - tolerance_window : end_id + tolerance_window]
-                    if re.search("Ich| ich|^ich", span):
-                        status.append("rough_match_{}".format(tolerance_window))
-                        start_id_corr, end_id_corr = correct_ids(
-                            start_id, end_id, span, tolerance_window
-                        )
-                        target = text[start_id_corr:end_id_corr]
-                        context_before.append(text[start_id_corr - context_size : start_id_corr])
-                        match.append(target)
-                        context_after.append(text[end_id_corr : end_id_corr + context_size])
-                        success = 1
-                        break
-                    else:
-                        tolerance_window += 5
-                if success == 0:
-                    status.append("no_match")
-                    context_before.append("None")
-                    match.append("None")
-                    context_after.append("None")
+                status_, context_before_, match_, context_after_ = extended_search(
+                    text, start_index, end_index, 5
+                )
+                context_data.loc[index] = [status_, context_before_, match_, context_after_]
+
         else:  # PDFs werden zur Zeit übergangen
-            status.append("PDF")
-            context_before.append("PDF")
-            match.append("PDF")
-            context_after.append("PDF")
+            context_data.loc[index] = ["PDF", "PDF", "PDF", "PDF"]
 
-    # Überflüssigen Whitespace entfernen:
-    context_before = [re.sub("[\t\n]", " ", line) for line in context_before]
-    context_after = [re.sub("[\t\n]", " ", line) for line in context_after]
-    match = [re.sub("[\t\n]", " ", line) for line in match]
+    result = pd.concat([data_table, context_data], axis=1)
 
-    data_table["status"] = status
-    data_table["context_before"] = context_before
-    data_table["match"] = match
-    data_table["context_after"] = context_after
-
-    return data_table
+    return result
 
 
 corpus_directory = "data/corpus/"

@@ -1,7 +1,7 @@
 # Aufbereitung von Annotationsdaten zur *Ich*-Verwendung in wissenschaftlichen Texten Studierender
 
 In Knorr (2021) wurden *Ich*-Instanzen in wissenschaftlichen Texten Studierender annotiert und qualitativ ausgewertet.
-In Andresen & Knorr (2021) wurden diese Annotationen für eine quantitative Auswertung nachgenutzt. Dazu sind eine
+In Andresen & Knorr (2021) werden diese Annotationen für eine quantitative Auswertung nachgenutzt. Dazu sind eine
 Reihe von Aufbereitungsschritten notwendig, die in Andresen (2021) ausführlich beschrieben werden. Dieses Repository
 stellt die zu diesem Zweck verwendeten Pythonskripte zur Verfügung. Die Beschreibung der Schritte erfolgt hier nur 
 überblicksartig, für Details zur Datenaufbereitung, der Motivation und dem dazugehörigen Forschungskontext 
@@ -14,13 +14,13 @@ gestellt werden. Nach einer kostenlosen Registrierung können die Daten aber hie
 http://doi.org/10.25592/uhhfdm.8326.
 
 ## 1 Mapping
-Die *Ich*-Instanzen wurden von vier Personen in MAXQDA annotiert. Aus einer Datenbank-Version (.mex) der MAXQDA-Projekte
-wurden die csv-Dateien im Verzeichnis `data/annotation-data` gewonnen. Im ersten Schritt werden die vier Versionen der
-Annotator:innen aufeinander abgebildet. Dieser Schritt ist vergleichsweise aufwendig, weil nicht alle vier Personen
-die gleichen *Ich*-Instanzen annotiert haben.
+Zu den *Ich*-Instanzen liegen Annotationen von vier Personen in MAXQDA vor. Im Verzeichnis `data/annotation-data` 
+liegen die csv-Dateien, die aus einer Datenbank-Version (.mex) der MAXQDA-Projekte gewonnen wurden. Im ersten Schritt 
+werden die vier Versionen der Annotator:innen aufeinander abgebildet. Dieser Schritt ist vergleichsweise aufwendig, 
+weil nicht alle vier Personen die gleichen *Ich*-Instanzen annotiert haben.
 
 ## 2 Kontextextraktion
-Für jede *Ich*-Instanz wurde anschließend aus dem Korpus der unmittelbare sprachliche Kontext extrahiert. Dies war aus
+Für jede *Ich*-Instanz wird anschließend aus dem Korpus der unmittelbare sprachliche Kontext extrahiert. Dies ist aus
 verschiedenen Gründen, die in Andresen (2021) beschrieben werden, nicht für alle Instanzen möglich.
 
 ## 3 Filtern
@@ -28,7 +28,7 @@ Anschließend wird der Datensatz in mehrfacher Hinsicht gefiltert. Ausgeschlosse
 - Instanzen ohne erfolgreiche Kontextextraktion,
 - Instanzen aus PDF-Dateien,
 - (Beinahe-)Duplikate,
-- weitere fehlerhafte oder für die Auswertung problematische Instanzen wie überwiegend fremdsprachliche Belege
+- weitere fehlerhafte oder für die Auswertung problematische Instanzen wie überwiegend fremdsprachliche Belege,
 - Instanzen, bei denen sich nicht mindestens zwei Annotator:innen einig waren,
 - Instanzen, die nicht einer der Kernkategorien (Verfasser-Ich, Forscher-Ich und Erzähler-Ich nach Steinhoff, 2007) 
 zugeordnet wurden.

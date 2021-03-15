@@ -5,7 +5,7 @@ from collections import Counter
 def map_star_categories(data_table):
     """Codes mit Sternchen in die ohne Sternchen überführen"""
 
-    coders = ["annotator2", "annotator1", "annotator3", "annotator4"]
+    coders = ["annotator1", "annotator2", "annotator3", "annotator4"]
 
     mapping_dict = {
         "Verfasser-Ich*": "Verfasser-Ich",
@@ -22,20 +22,15 @@ def map_star_categories(data_table):
 
 def add_agreement_info(data_table):
 
-    annotations = [
-        (a, b, c, d, index)
-        for a, b, c, d, index in zip(
-            data_table["Code-annotator1"],
-            data_table["Code-annotator2"],
-            data_table["Code-annotator3"],
-            data_table["Code-annotator4"],
-            data_table.index,
-        )
-    ]
     max_agreement_freqs = []
     max_agreement_labels = []
 
-    for a, b, c, d, index in annotations:
+    for a, b, c, d in zip(
+        data_table["Code-annotator1"],
+        data_table["Code-annotator2"],
+        data_table["Code-annotator3"],
+        data_table["Code-annotator4"],
+    ):
         counts = Counter([a, b, c, d])
         max_agreement_label = counts.most_common(1)[0][0]
         max_agreement_freq = counts[max_agreement_label]
@@ -114,7 +109,9 @@ print("{} Zeilen nach Löschung von Duplikaten".format(data_table.shape[0]))
 
 # Weitere Instanzen manuell ausschließen (Beinahe-Duplikate, überwiegend fremdsprachliche Belege, …)
 data_table = fix_data_set(data_table)
-print("{} Zeilen nach Löschung fehlerhafter Dateien und Einzelsätzen".format(data_table.shape[0]))
+print(
+    "{} Zeilen nach Löschung von fehlerhaften Dateien und Einzelsätzen".format(data_table.shape[0])
+)
 
 # Minimales Agreement von zwei Annotator:innen
 min_agreement = 2

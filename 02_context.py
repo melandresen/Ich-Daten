@@ -3,40 +3,35 @@ import pandas as pd
 import re
 
 
-def correct_ids(start, end, string, window):
+def update_indices(span_start, span_end, string):
 
     match = re.search("[Ii]ch", string)
-    match_start = match.start(0)
 
-    expected_match_start = window
-    difference = expected_match_start - match_start
-
-    start_corr = start - difference
-    end_corr = end - difference
+    start_corr = span_start + match.start(0)
+    end_corr = span_end - len(string) + match.end(0)
 
     return start_corr, end_corr
 
 
 def extended_search(text, start_index, end_index, tolerance_window):
 
-    span = text[start_index - tolerance_window : end_index + tolerance_window]
+    while tolerance_window < 30:
 
-    if re.search("Ich| ich|^ich", span):
-        status = "rough_match_{}".format(tolerance_window)
-        start_id_corr, end_id_corr = correct_ids(start_index, end_index, span, tolerance_window)
-        target = text[start_id_corr:end_id_corr]
-        context_before = text[start_id_corr - context_size : start_id_corr]
-        match = target
-        context_after = text[end_id_corr : end_id_corr + context_size]
+        span_start = start_index - tolerance_window
+        span_end = end_index + tolerance_window
+        span = text[span_start : span_end]
 
-        return status, context_before, match, context_after
+        if re.search("Ich| ich|^ich", span):
+            status = "rough_match_{}".format(tolerance_window)
+            start_index_corr, end_index_corr = update_indices(span_start, span_end, span)
+            target = text[start_index_corr:end_index_corr]
+            context_before = text[start_index_corr - context_size : start_index_corr]
+            match = target
+            context_after = text[end_index_corr : end_index_corr + context_size]
 
-    elif tolerance_window < 25:
-        status, context_before, match, context_after = extended_search(
-            text, start_index, end_index, tolerance_window + 5
-        )
+            return status, context_before, match, context_after
 
-        return status, context_before, match, context_after
+        tolerance_window += 5
 
     else:
         return "no_match", "None", "None", "None"
@@ -64,10 +59,10 @@ def get_context(directory, data_table, context_size):
                     text[end_index : end_index + context_size],
                 ]
             else:
-                status_, context_before_, match_, context_after_ = extended_search(
+                status, context_before, match, context_after = extended_search(
                     text, start_index, end_index, 5
                 )
-                context_data.loc[index] = [status_, context_before_, match_, context_after_]
+                context_data.loc[index] = [status, context_before, match, context_after]
 
         else:  # PDFs werden zur Zeit übergangen
             context_data.loc[index] = ["PDF", "PDF", "PDF", "PDF"]

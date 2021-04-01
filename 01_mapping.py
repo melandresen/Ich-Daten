@@ -94,6 +94,7 @@ def get_coder_data(annotation_directory, coders):
 
     for coder in coders:
         codings = pd.read_csv("{}{}_Codings.csv".format(annotation_directory, coder), sep="\t")
+        codings = codings[codings['Preview'].str.match("[iI]ch")]   # filter for correct annotation span
         codings = codings[
             [
                 "ID",

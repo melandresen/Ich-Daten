@@ -1,6 +1,8 @@
 # Aufbereitung von Annotationsdaten zur *Ich*-Verwendung in wissenschaftlichen Texten Studierender
 
-In Knorr (2021) wurden *Ich*-Instanzen in wissenschaftlichen Texten Studierender annotiert und qualitativ ausgewertet.
+Dieses Repository umfasst Daten und Skripte, die im Rahmen von Andresen & Knorr (2021) sowie Andresen (2021)
+entstanden sind. Beide Studien basieren auf den Annotationen von Knorr (2021). 
+Dort wurden *Ich*-Instanzen in wissenschaftlichen Texten Studierender annotiert und qualitativ ausgewertet.
 In Andresen & Knorr (2021) werden diese Annotationen für eine quantitative Auswertung nachgenutzt. Dazu sind eine
 Reihe von Aufbereitungsschritten notwendig, die in Andresen (2021) ausführlich beschrieben werden. Dieses Repository
 stellt die zu diesem Zweck verwendeten Pythonskripte zur Verfügung. Die Beschreibung der Schritte erfolgt hier nur 
@@ -9,9 +11,9 @@ siehe Andresen (2021).
 
 ## Voraussetzungen
 Für Schritt 2 wird das Korpus KoLaS (Andresen & Knorr 2017) in einer in txt-Dateien konvertierten Version im 
-Verzeichnis `data/corpus` benötigt. Das Korpus kann aus datenschutzrechtlichen Gründen nicht hier zur Verfügung 
+Verzeichnis `data/corpus` benötigt. Das Korpus kann aus datenschutzrechtlichen Gründen hier nicht zur Verfügung 
 gestellt werden. Nach einer kostenlosen Registrierung können die Daten aber hier bezogen werden: 
-http://doi.org/10.25592/uhhfdm.8326.
+http://doi.org/10.25592/uhhfdm.8985.
 
 ## 1 Mapping
 Zu den *Ich*-Instanzen liegen Annotationen von vier Personen in MAXQDA vor. Im Verzeichnis `data/annotation-data` 
@@ -54,7 +56,8 @@ Bonn: Gesellschaft für Informatik. https://doi.org/10.18420/inf2020_124.
 
 Knorr, Dagmar. 2021. Zwischen Forscher-, Verfasser- und Erzähler-Ich. 
 Eine korpuslinguistische Studie zur Konstruktion von Selbstreferenz und zu ihrer Einsatzmöglichkeit in der 
-Schreibberatungsausbildung. Zeitschrift für interkulturellen Fremdsprachenunterricht 26(1).
+Schreibberatungsausbildung. Zeitschrift für interkulturellen Fremdsprachenunterricht 26(1). 137–160. 
+https://tujournals.ulb.tu-darmstadt.de/index.php/zif/article/view/1116/1112. 
 
 Steinhoff, Torsten. 2007. Zum ich-Gebrauch in Wissenschaftstexten. Zeitschrift für germanistische Linguistik 35(1–2). 
 1–26. https://doi.org/10.1515/ZGL.2007.002.
